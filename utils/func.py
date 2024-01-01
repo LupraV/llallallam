@@ -61,7 +61,7 @@ def llm_query():
     # query prompt wrapper
     query_wrapper_prompt = SimpleInputPrompt("{query_str} [/INST]")
 
-    # Create an HF LLM using the llama index wrapper 
+    # Create a llama-index wrapper for Hugging Face
     llm = HuggingFaceLLM(context_window=4096,
                         max_new_tokens=256,
                         system_prompt=system_prompt,
@@ -69,7 +69,7 @@ def llm_query():
                         model=model,
                         tokenizer=tokenizer)
 
-    # Create and dl embeddings instance  
+    # Create and download embeddings instance  
     embeddings=LangchainEmbedding(
         HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     )
@@ -77,8 +77,8 @@ def llm_query():
     # Create new service context instance to allow llmindex work with huggingface
 
     service_context = ServiceContext.from_defaults(
-        chunk_size=1024,
-        chunk_overlap=20,
+        chunk_size=750,
+        chunk_overlap=50,
         llm=llm,
         embed_model=embeddings
     )
