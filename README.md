@@ -1,4 +1,4 @@
-# Massey University Policies RAG
+# Massey University Policy RAG
 RAG approach LLM using Mistral-7B-instruct-v0.2 with Llama-index LangChain framework.
 
 The methodology procedure adopted is as follows:
