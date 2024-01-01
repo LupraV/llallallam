@@ -13,3 +13,4 @@ streamlit
 lama-index
 llama_hub
 flask
+twilio
