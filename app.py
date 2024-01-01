@@ -17,8 +17,8 @@ from llama_index import VectorStoreIndex, ServiceContext, SimpleDirectoryReader
 from pathlib import Path
 
 
-# Define variable to hold llama2 weights naming 
-name = "meta-llama/Llama-2-7b-chat-hf"
+# Define weights naming variable
+name = "model/Mistral-7B-Instruct-v0.2-GGUF"
 
 # Set auth token variable from hugging face 
 load_dotenv()
@@ -32,7 +32,7 @@ bnb_config = BitsAndBytesConfig(
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
 
-#to avoid reloading of the model at each run
+# avoid reloading model each run
 @st.cache_resource
 def get_tokenizer_model():
     # Create tokenizer
@@ -53,16 +53,17 @@ def get_tokenizer_model():
 
 # Create a system prompt 
 system_prompt = """<s>[INST] <<SYS>>
-You are a helpful, respectful and honest assistant. Always answer as 
-helpfully as possible, while being safe. Your answers should not include
-any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content.
+You are an helpful, respectful and honest assistant. Always answer 
+accurately, do NOT . Your answers must not include any harmful, 
+unethical, racist, sexist, toxic, dangerous, or illegal content.
 Please ensure that your responses are socially unbiased and positive in nature.
 
 If a question does not make any sense, or is not factually coherent, explain 
-why instead of answering something not correct. If you don't know the answer 
-to a question, please don't share false information.
+why instead of answering something incorrect. If you don't know the answer 
+to a question, please NEVER share false information.
 
-Your goal is to provide answers relating to course information based on the provided document.<</SYS>>
+Your goal is to provide answers relating to Massey University policies information
+based on the provided documents, providing also the exact source chunk of texts.<</SYS>>
 """
 # query prompt wrapper
 query_wrapper_prompt = SimpleInputPrompt("{query_str} [/INST]")
@@ -71,7 +72,7 @@ query_wrapper_prompt = SimpleInputPrompt("{query_str} [/INST]")
 
 tokenizer, model = get_tokenizer_model()
 
-# Create a HF LLM using the llama index wrapper 
+# Create a llama-index wrapper for Hugging Face 
 llm = HuggingFaceLLM(context_window=4096,
                     max_new_tokens=256,
                     system_prompt=system_prompt,
@@ -79,15 +80,15 @@ llm = HuggingFaceLLM(context_window=4096,
                     model=model,
                     tokenizer=tokenizer)
 
-# Create and dl embeddings instance  
+# Create and download embeddings instance  
 embeddings=LangchainEmbedding(
     HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 )
 
-# Create new service context instance to allow llmindex work with huggingface
-
+# Create new service context instance to allow llama-index work with hugging face
 service_context = ServiceContext.from_defaults(
-    chunk_size=1024,
+    chunk_size=750,
+    overlap=50,
     llm=llm,
     embed_model=embeddings
 )
@@ -95,7 +96,7 @@ service_context = ServiceContext.from_defaults(
 #set the service context
 set_global_service_context(service_context)
 
-documents = SimpleDirectoryReader('./BCN_4787C.pdf').load_data()
+documents = SimpleDirectoryReader('./MasseyPolicies.zip').load_data()
 
 # Create an index
 index = VectorStoreIndex.from_documents(documents)
@@ -103,19 +104,19 @@ index = VectorStoreIndex.from_documents(documents)
 # Setup index query engine using LLM 
 query_engine = index.as_query_engine()
 
-"""frontend implementation"""
+"""Streamlit implementation"""
 # Create centered main title 
-st.title('🦙 BCN_4787C CourseChatbot')
-# Create a text input box for the user
-prompt = st.text_input('Input your question here')
+st.title('Massey university Policies Helper')
+# Create a text input box
+prompt = st.text_input('Type your question here')
 
 # If the user hits enter
 if prompt:
     response = query_engine.query(prompt)
     st.write(response)
 
-    # Display raw response object
-    with st.expander('Response Object'):
+    # Display response
+    with st.expander('Response'):
         st.write(response)
     # Display source text
     with st.expander('Source Text'):
