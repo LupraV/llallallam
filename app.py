@@ -47,7 +47,7 @@ def get_tokenizer_model():
 # Create a system prompt 
 system_prompt = """<s>[INST] <<SYS>>
 You are an helpful, respectful and honest assistant. Always answer 
-accurately, do NOT . Your answers must not include any harmful, 
+accurately, do NOT fake information. Your answers must not include any harmful, 
 unethical, racist, sexist, toxic, dangerous, or illegal content.
 Please ensure that your responses are socially unbiased and positive in nature.
 
