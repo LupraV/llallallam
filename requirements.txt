@@ -10,7 +10,7 @@ scipy
 xformers 
 sentencepiece
 streamlit
-lama-index==0.7.21
-llama_hub==0.0.19
+lama-index
+llama_hub
 flask
 twilio
