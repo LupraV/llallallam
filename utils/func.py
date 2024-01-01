@@ -85,7 +85,7 @@ def llm_query():
   
     #set the service context
     #set_global_service_context(service_context)
-    documents = SimpleDirectoryReader('./BCN_4787C.pdf').load_data()
+    documents = SimpleDirectoryReader('./MasseyPolicies.zip').load_data()
  
     # Create an index
     index = VectorStoreIndex.from_documents(documents, service_context=service_context)
