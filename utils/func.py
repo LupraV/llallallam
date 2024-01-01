@@ -35,10 +35,6 @@ def get_tokenizer_model(name, auth_token):
     # Create tokenizer
     tokenizer = AutoTokenizer.from_pretrained(name, cache_dir='./model/', use_auth_token=auth_token)
 
-    # # Create model (some changes here)
-    # model = AutoModelForCausalLM.from_pretrained(name, cache_dir='./model/'
-    #                         , use_auth_token=auth_token, torch_dtype=torch.float16, 
-    #                         rope_scaling={"type": "dynamic", "factor": 2}, load_in_8bit=True)
     model = AutoModelForCausalLM.from_pretrained(name, cache_dir='./model/'
                             , use_auth_token=auth_token, torch_dtype=torch.float16, 
                             quantization_config=bnb_config, device_map='auto') 
