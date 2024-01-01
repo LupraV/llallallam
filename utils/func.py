@@ -15,8 +15,8 @@ from llama_index import ServiceContext
 from llama_index import VectorStoreIndex, SimpleDirectoryReader
 from pathlib import Path
 
-# Define variable to hold llama2 weights naming 
-name = "meta-llama/Llama-2-7b-chat-hf"
+# Define weights naming variable
+name = "model/Mistral-7B-Instruct-v0.2-GGUF"
 
 # Set auth token variable from hugging face 
 load_dotenv()
@@ -29,7 +29,7 @@ bnb_config = BitsAndBytesConfig(
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
 
-#to avoid reloading of the model at each run
+# Avoid reloading the model each run
 @st.cache_resource 
 def get_tokenizer_model(name, auth_token):
     # Create tokenizer
