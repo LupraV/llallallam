@@ -5,26 +5,26 @@ from utils.func import llm_query, get_tokenizer_model
 import torch
 from dotenv import load_dotenv
 
-#======= hugging face settings ===============
+# Hugging face
 load_dotenv()
 auth_token = os.environ["HUGGING_FACE_API_KEY"]
 
 query_engine = llm_query()
 
-"""frontend implementation"""
-# Create centered main title 
-st.title('🦙 BCN_4787C CourseChatbot')
+"""Streamlit implementation"""
+# Main title 
+st.title('Massey University Policies Helper')
 
-# Create a text input box for the user
-prompt = st.text_input('Input your question here')
+# Text input box for the user
+prompt = st.text_input('Type your question here')
 
-# If the user hits enter
+# If user hits enter
 if prompt:
     response = query_engine.query(prompt)
     st.write(response)
 
-    # Display raw response object
-    with st.expander('Response Object'):
+    # Display raw response
+    with st.expander('Response'):
         st.write(response)
     # Display source text
     with st.expander('Source Text'):
